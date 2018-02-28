@@ -1,12 +1,19 @@
 {
   "challengers": [
     {
+      "id": 0,
       "name": "YannArthus",
       "image": "https://images.pexels.com/photos/241408/pexels-photo-241408.jpeg"
     },
     {
+      "id": 1,
       "name": "Berto",
       "image": "https://images.pexels.com/photos/247522/pexels-photo-247522.jpeg"
+    },
+    {
+      "id": 2,
+      "name": "Bartleby8",
+      "image": "https://orig00.deviantart.net/a12b/f/2011/005/d/2/d25828b4fa37fe115f834f8d0509e1ca-d36h9ye.jpg"
     }
   ]
 }
