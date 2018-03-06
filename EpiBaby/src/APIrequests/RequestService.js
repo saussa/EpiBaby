@@ -1,31 +1,51 @@
-class RequestService {
+import EventEmitter from 'react-native-eventemitter';
+
+/// TODO : handle asyncness.
+/// TODO : create event emitter and listeners.
+
+
+export class RequestService {
 
     constructor() {
         this.req = new XMLHttpRequest();
     }
 
-    GET() {
+    static GET() {
+        this.req = new XMLHttpRequest();
+
         this.req.onreadystatechange = function (event) {
+            let JSONArray;
             if (this.readyState === XMLHttpRequest.DONE) {
                 if (this.status === 200) {
                     JSONArray = JSON.parse(this.responseText);
-                    resArray = [];
-                    JSONArray.forEach(c => function () {
-                        resArray.push(new RequestService().HttpResponse(c.toString()));
-                    });
-                    return resArray;
+
+                    let resArray: HttpResponse[] = [];
+
+                    console.log("RESARRAY MA BITE : " + resArray);
+
+                    for (let i = 0; i < JSONArray.length; ++i) {
+                        resArray.push(new HttpResponse(JSON.stringify(JSONArray[i])));
+                    }
+
+                    console.log('RESARRAY : ' + resArray);
+
+                    EventEmitter.emit('challengers.arrived', JSON.stringify(resArray));
+
                 } else {
                     console.log("ERROR processing request GET");
+                    console.log(this.responseText);
                     return null;
                 }
             }
         };
 
-        this.req.open('GET', 'localhost:3000/challengers', true);
+        this.req.open('GET', 'http://10.14.59.76:3000/challengers', true);
         this.req.send(null);
     }
 
-    GETSize() {
+    static GETSize() {
+        this.req = new XMLHttpRequest();
+
         this.req.onreadystatechange = function (event) {
             if (this.readyState === XMLHttpRequest.DONE) {
                 if (this.status === 200) {
@@ -38,11 +58,13 @@ class RequestService {
             }
         };
 
-        this.req.open('GET', 'localhost:3000/challengers', true);
+        this.req.open('GET', 'http://10.14.59.76:3000/challengers', true);
         this.req.send(null);
     }
 
-    POST(challenger) {
+    static POST(challenger) {
+        this.req = new XMLHttpRequest();
+
         this.req.onreadystatechange = function (event) {
             if (this.readyState === XMLHttpRequest.DONE) {
                 if (this.status === 200) {
@@ -54,12 +76,14 @@ class RequestService {
             }
         };
 
-        this.req.open('POST', 'localhost:3000/challengers', true);
+        this.req.open('POST', 'http://10.14.59.76:3000/challengers', true);
         this.req.setRequestHeader("Content-type", "application/json");
         this.req.send(challenger);
     }
 
-    PUT(challenger, id?) {
+    static PUT(challenger, id?) {
+        this.req = new XMLHttpRequest();
+
         this.req.onreadystatechange = function (event) {
             if (this.readyState === XMLHttpRequest.DONE) {
                 if (this.status === 200) {
@@ -73,12 +97,14 @@ class RequestService {
 
         nId = id ? id : JSON.parse(challenger).id;
 
-        this.req.open('PUT', 'localhost:3000/challenger/' + nId, true);
+        this.req.open('PUT', 'http://10.14.59.76:3000/challenger/' + nId, true);
         this.req.setRequestHeader("Content-type", "application/json");
         this.req.send(challenger);
     }
 
-    DELETE(id) {
+    static DELETE(id) {
+        this.req = new XMLHttpRequest();
+
         this.req.onreadystatechange = function (event) {
             if (this.readyState === XMLHttpRequest.DONE) {
                 if (this.status === 200) {
@@ -90,35 +116,41 @@ class RequestService {
             }
         };
 
-        this.req.open('DELETE', 'localhost:3000/challenger/' + id, true);
+        this.req.open('DELETE', 'http://10.14.59.76:3000/challenger/' + id, true);
         this.req.send(null);
     }
 
-    buildBodyForReq(na, im, id?) {
+    static buildBodyForReq(na, im, id?) {
         res = '{' + ' "id": ' + (id ? id : this.GETSize()) + ', "name": "' + na + '", "image": "' + im + '" }';
         return res;
     }
+}
 
-    HttpResponse = class {
-         constructor(r?) {
-             this.raw = r;
-             this.json = null;
-             this.name = "";
-             this.image = "";
-             this.id = -1;
+export class HttpResponse {
+    raw: "";
+    json: null;
+    name: "";
+    image: "";
+    id: -1;
 
-             if (this.raw) {
-                 this.json = JSON.parse(this.raw);
-                 this.name = this.json.name;
-                 this.image = this.json.image;
-                 this.id = this.json.id;
-             }
-         }
+    constructor(r?) {
+        console.log('AIRE : ' + r);
 
-         getRaw() { return this.raw; }
-         getJson() { return this.json; }
-         getName() { return this.name; }
-         getImage() { return this.image; }
-         getId() { return this.id; }
+        if (r) {
+            console.log('IN : ' + r);
+
+            this.json = JSON.parse(r);
+            this.name = this.json.name;
+            console.log('NAME : ' + this.name);
+            this.image = this.json.image;
+            console.log('IMAGE : ' + this.image);
+            this.id = this.json.id;
+        }
     }
+
+    getRaw() { return this.raw; }
+    getJson() { return this.json; }
+    getName() { return this.name; }
+    getImage() { return this.image; }
+    getId() { return this.id; }
 }
