@@ -1,16 +1,16 @@
 import React from "react"
 import { StyleSheet, View} from "react-native"
-import Header from "./Header";
-import Body from "./Body";
-import {StackNavigator} from 'react-navigation';
+
+import ChallengerListComponent from "../ChallengerList/Challengers";
+import Header from "../Home/Header";
 
 export default class Final extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-            <Header/>
+                <Header/>
                 <View style={{flex: 8 }}>
-                    <Body/>
+                    <ChallengerListComponent/>
                 </View>
             </View>
         )

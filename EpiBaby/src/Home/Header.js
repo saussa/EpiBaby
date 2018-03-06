@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Image, View } from "react-native";
 
-const Logo = require("../Home/Asset/Logo.png");
+const Logo = require("../Home/Assets/Logo.png");
 
 export default class Header extends React.Component {
     render() {

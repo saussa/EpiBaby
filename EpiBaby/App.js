@@ -1,15 +1,11 @@
 import React from 'react';
 import { StyleSheet, View} from 'react-native';
 import Home from "./src/Home/Home";
-
+import {Tabs} from "./src/router";
 
 export default class App extends React.Component {
   render() {
-    return (
-        <View style={styles.container}>
-          <Home/>
-        </View>
-    );
+    return <Tabs/> ;
   }
 }
 
